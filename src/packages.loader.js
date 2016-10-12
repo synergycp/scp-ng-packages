@@ -3,35 +3,36 @@
 
   angular
     .module('scp.packages')
-    .factory('PackageLoader', PackageLoader)
+    .service('PackageLoader', PackageLoaderService)
     ;
 
   /**
    * @ngInject
    */
-  function PackageLoader(Api, $ocLazyLoad, PackagesLoader) {
-    var loader = this;
-    var $api = Api.all(PackagesLoader.getApiBase());
+  function PackageLoaderService(Api, $ocLazyLoad, PackagesLoaderProvider) {
+    var PackageLoader = this;
+    var $api = Api.all(PackagesLoaderProvider.getApiBase());
+    var loadPromise;
 
-    return makeLoadPackagesPromise();
+    PackageLoader.load = loadPackages;
 
     ///////////
 
-    function makeLoadPackagesPromise() {
-      return $api
-        .getList()
-        .then(makeLoadFilesPromise)
-        ;
+    function loadPackages() {
+      return (loadPromise = loadPromise ||
+        $api
+          .getList()
+          .then(loadFiles)
+      );
     }
 
-    function makeLoadFilesPromise(packages) {
-      var files = _(packages)
-        .map('files')
-        .flatten()
-        .value()
-        ;
-
-      return $ocLazyLoad.load(files);
+    function loadFiles(packages) {
+      return $ocLazyLoad.load(
+        _(packages)
+          .map('files')
+          .flatten()
+          .value()
+      );
     }
   }
 })();
