@@ -6,18 +6,14 @@
   /**
    * @ngInject
    */
-  function routeConfig($futureStateProvider, $stateProvider, RouteHelpersProvider, PackageLoaderProvider) {
+  function routeConfig($futureStateProvider, $stateProvider, RouteHelpersProvider) {
     var helper = RouteHelpersProvider;
     $stateProvider.state('app.pkg', {
       url: '/pkg',
       abstract: true,
       template: helper.dummyTemplate,
     });
-    $futureStateProvider.addResolve(function (PackageLoader) {
-      "ngInject";
-
-      return PackageLoader;
-    });
+    $futureStateProvider.addResolve(loadPackages);
 
     function deprecated() {
       $futureStateProvider
@@ -33,10 +29,15 @@
     /**
      * @ngInject
      */
+    function loadPackages(PackageLoader) {
+      return PackageLoader.load();
+    }
+
+    /**
+     * @ngInject
+     */
     function packageStateFactory(futureState, PackageLoader) {
-
-
-      return PackageLoader.then(function() {
+      return PackageLoader.load().then(function () {
         // If we return the files object here,
         // $futureStateProvider chokes.
       });

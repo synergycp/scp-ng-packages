@@ -1,23 +1,22 @@
 {
-  "name": "scp-ng-router",
-  "version": "1.0.0",
-  "description": "Synergy Control Panel Angular router files",
+  "name": "scp-ng-packages",
+  "version": "0.0.3",
+  "description": "Synergy Control Panel Angular packages files",
   "main": "dist.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://github.com/cabloo/scp-ng-router.git"
+    "url": "git+ssh://github.com/cabloo/scp-ng-packages.git"
   },
   "author": "Synergy Control Panel",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/cabloo/scp-ng-router/issues"
+    "url": "https://github.com/cabloo/scp-ng-packages/issues"
   },
-  "homepage": "https://github.com/cabloo/scp-ng-router#readme",
+  "homepage": "https://github.com/cabloo/scp-ng-packages#readme",
   "devDependencies": {
-    "angular-ui-router": "^0.3.1",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.0.0",
     "gulp-concat": "^2.6.0",
@@ -31,8 +30,6 @@
     "gulp-pug": "^3.0.4",
     "gulp-sync": "^0.1.4",
     "gulp-uglify": "^2.0.0",
-    "gulp-util": "^3.0.7",
-    "oclazyload": "^1.0.9",
-    "ui-router-extras": "^0.1.2"
+    "gulp-util": "^3.0.7"
   }
 }
