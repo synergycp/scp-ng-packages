@@ -9,9 +9,9 @@
   /**
    * @ngInject
    */
-  function PackageLoaderService(Api, $ocLazyLoad, PackagesLoaderProvider) {
+  function PackageLoaderService(Api, $ocLazyLoad, PackagesLoader) {
     var PackageLoader = this;
-    var $api = Api.all(PackagesLoaderProvider.getApiBase());
+    var $api = Api.all(PackagesLoader.getApiBase());
     var loadPromise;
 
     PackageLoader.load = loadPackages;

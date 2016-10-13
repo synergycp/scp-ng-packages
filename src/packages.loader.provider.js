@@ -3,7 +3,8 @@
 
   angular
     .module('scp.packages')
-    .provider('PackagesLoader', makePackagesLoaderProvider);
+    .provider('PackagesLoader', makePackagesLoaderProvider)
+    ;
 
   /**
    *  Service

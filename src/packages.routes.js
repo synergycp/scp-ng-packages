@@ -6,7 +6,7 @@
   /**
    * @ngInject
    */
-  function routeConfig($futureStateProvider, $stateProvider, RouteHelpersProvider, PackageLoaderProvider) {
+  function routeConfig($futureStateProvider, $stateProvider, RouteHelpersProvider) {
     var helper = RouteHelpersProvider;
     $stateProvider.state('app.pkg', {
       url: '/pkg',
