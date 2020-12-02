@@ -1,131 +1,70 @@
-var
-  gulp = require('gulp'),
-  $ = require('gulp-load-plugins')(),
-  ;
+var gulp = require("gulp"),
+  $ = require("gulp-load-plugins")();
 
 var isProduction = true;
 
 var paths = {
-  scripts: 'src/',
+  scripts: "src/",
 };
 
 var source = {
   scripts: [
-    paths.scripts + 'core.module.js',
+    paths.scripts + "packages.module.js",
 
     // modules
-    paths.scripts + '**/*.module.js',
-    paths.scripts + '**/*.js'
+    paths.scripts + "**/*.module.js",
+    paths.scripts + "**/*.js",
   ],
-  templates: paths.scripts + '**/*.pug',
 };
 
 var build = {
-  dir: './build',
+  dir: "./build",
   src: {
-    js: 'src.min.js',
-    tpls: 'templates.js',
-  },
-  vendor: {
-    js: 'vendor.min.js',
-    css: 'vendor.min.css',
+    js: "src.min.js",
   },
   dist: {
-    js: 'dist.min.js',
-  }
-};
-
-var vendor = {
-  source: require('./vendor.json'),
+    js: "dist.min.js",
+  },
 };
 
 var cssnanoOpts = {};
 var pugOptions = {
-  basedir: './',
+  basedir: "./",
 };
 var tplCacheOptions = {
-  root: 'scp/packages',
-  module: 'scp.packages',
+  root: "scp/packages",
+  module: "scp.packages",
 };
 
-gulp.task('scripts', function () {
+gulp.task("scripts", function () {
   return gulp
     .src(source.scripts)
     .pipe($.jsvalidate())
-    .on('error', handleError)
+    .on("error", handleError)
     .pipe($.concat(build.src.js))
     .pipe($.ngAnnotate())
-    .on('error', handleError)
-    .pipe($.uglify({
-      preserveComments: 'some'
-    }))
-    .on('error', handleError)
-    .pipe(gulp.dest(build.dir))
-    ;
+    .on("error", handleError)
+    .pipe(
+      $.uglify({
+        preserveComments: "some",
+      })
+    )
+    .on("error", handleError)
+    .pipe(gulp.dest(build.dir));
 });
 
-// Build the base script to start the application from vendor assets
-gulp.task('vendor', function () {
-  log('Copying base vendor assets..');
-
-  var jsFilter = $.filter('**/*.js', {
-    restore: true
-  });
-  var cssFilter = $.filter('**/*.css', {
-    restore: true
-  });
-
+gulp.task("merge", function () {
   return gulp
-    .src(vendor.source)
-    .pipe($.expectFile(vendor.source))
-    .pipe(jsFilter)
-    .pipe($.concat(build.vendor.js))
-    .pipe($.if(isProduction, $.uglify()))
-    .pipe(gulp.dest(build.dir))
-    .pipe(jsFilter.restore())
-    .pipe(cssFilter)
-    .pipe($.concat(build.vendor.css))
-    .pipe($.cssnano(cssnanoOpts))
-    .pipe(gulp.dest(build.dir))
-    .pipe(cssFilter.restore())
-    ;
-});
-
-gulp.task('templates', function () {
-  return gulp
-    .src(source.templates)
-    .pipe($.pug(pugOptions))
-    .on('error', handleError)
-    .pipe($.angularTemplatecache(tplCacheOptions))
-    .pipe($.if(isProduction, $.uglify({
-      preserveComments: 'some'
-    })))
-    .pipe(gulp.dest(build.dir))
-    ;
-});
-
-gulp.task('merge', function () {
-  return gulp
-    .src([
-      build.dir +'/'+build.vendor.js,
-      build.dir +'/'+build.src.js,
-      build.dir +'/'+build.src.tpls,
-    ])
+    .src([build.dir + "/" + build.src.js])
     .pipe($.concat(build.dist.js))
-    .pipe(gulp.dest('./'))
-    ;
+    .pipe(gulp.dest("./"));
 });
 
-gulp.task('default', gulp.series([
-  'scripts',
-  'vendor',
-  'templates',
-  'merge',
-]));
+gulp.task("default", gulp.series(["scripts", "merge"]));
 
 function handleError(err) {
   log(err.toString());
-  this.emit('end');
+  this.emit("end");
 }
 
 // log to console using

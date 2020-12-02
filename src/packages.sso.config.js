@@ -1,10 +1,7 @@
 (function () {
-  'use strict';
+  "use strict";
 
-  angular
-    .module('scp.packages')
-    .config(AddPackageLoaderToSsoResolves)
-    ;
+  angular.module("scp.packages").config(AddPackageLoaderToSsoResolves);
 
   /**
    * @ngInject
@@ -17,6 +14,9 @@
    * @ngInject
    */
   function PackageLoaderResolver(PackageLoader) {
-    return PackageLoader.load();
+    return PackageLoader.load().catch(function (error) {
+      // Intentionally do not bubble up any package loading errors, as it could kill the whole app!
+      console.error("Error loading packages: ", error);
+    });
   }
 })();
